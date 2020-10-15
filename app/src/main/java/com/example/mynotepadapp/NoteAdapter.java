@@ -40,6 +40,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> {
         Note note = noteList.get(position);
 
         holder.title.setText(note.getTitle());
+        //if content size is > 80, just substring the first 80 and add ... to display
         holder.content.setText(note.getContent());
         holder.time.setText(new Date().toString());
     }

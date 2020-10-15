@@ -6,7 +6,7 @@
         android:id="@+id/menu_about"
         android:icon="@android:drawable/ic_menu_help"
         android:title="@string/about"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_add"
         android:icon="@android:drawable/ic_menu_add"

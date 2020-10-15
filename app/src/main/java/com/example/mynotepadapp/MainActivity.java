@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
         for (int i = 0; i < 20; i++) {
             noteList.add(new Note());
         }
+        //load json file in onCreate
     }
 
     @Override
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity
 //        Toast.makeText(v.getContext(), "SHORT " + m.toString(), Toast.LENGTH_SHORT).show();
 
         //open AddNoteActivity with data
+        createNewNote();
     }
 
     @Override
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity
 //        int pos = recyclerView.getChildLayoutPosition(v);
 //        Employee m = employeeList.get(pos);
 //        Toast.makeText(v.getContext(), "LONG " + m.toString(), Toast.LENGTH_SHORT).show();
+
+        //show dialog to delete the note
         return true;
     }
 
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void createNewNote(){
-        Intent intent = new Intent(this, AddNoteActivity.class);
+        Intent intent = new Intent(this, EditNoteActivity.class);
         startActivity(intent);
         //myAdapter.notifyDataSetChanged();
     }
