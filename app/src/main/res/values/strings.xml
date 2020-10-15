@@ -3,4 +3,7 @@
     <string name="title">title</string>
     <string name="time">time</string>
     <string name="content">content</string>
+    <string name="about">About</string>
+    <string name="add">Add</string>
+    <string name="save">save</string>
 </resources>

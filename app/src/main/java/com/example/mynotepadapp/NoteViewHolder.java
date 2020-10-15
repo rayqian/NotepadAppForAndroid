@@ -12,11 +12,11 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     TextView time;
     TextView content;
 
-    NoteViewHolder(View view){
-        super(view);
+    NoteViewHolder(View itemView){
+        super(itemView);
 
-        title = view.findViewById(R.id.title);
-        time = view.findViewById(R.id.time);
-        content = view.findViewById(R.id.content);
+        title = itemView.findViewById(R.id.title);
+        time = itemView.findViewById(R.id.time);
+        content = itemView.findViewById(R.id.content);
     }
 }
