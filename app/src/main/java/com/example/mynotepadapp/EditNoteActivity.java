@@ -43,7 +43,8 @@ public class EditNoteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.menu_save:
-                //call add function
+                //call add function to return value to the mainActivity
+                returnValue(null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

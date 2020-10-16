@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity
 //                    "This text is the content of note number " + (i+1));
 //            noteList.add(n);
 //        }
-//        writeJSONData();
+        writeJSONData();
         noteList.clear();
         readJSONData();
 
@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity
                 writeJSONData();
                 noteList.clear();
                 readJSONData();
+                myAdapter.notifyDataSetChanged();
             }
         }
     }
