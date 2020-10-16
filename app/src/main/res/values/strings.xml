@@ -7,4 +7,6 @@
     <string name="add">Add</string>
     <string name="save">save</string>
     <string name="enter_title_here">enter title here</string>
+    <string name="notes_file">NotesFile.json</string>
+
 </resources>
