@@ -1,8 +1,9 @@
 package com.example.mynotepadapp;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Note implements Comparable<Note> {
+public class Note implements Comparable<Note>, Serializable {
     private String title;
     private String content;
     private Date lastDate;
@@ -19,6 +20,15 @@ public class Note implements Comparable<Note> {
 
     String getContent(){
         return this.content;
+    }
+
+    void setTitle(String t){
+        this.title = t;
+    }
+
+
+    void setContent(String c){
+        this.content = c;
     }
 
     Date getLastDate(){

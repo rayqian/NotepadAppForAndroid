@@ -12,12 +12,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EditNoteActivity extends AppCompatActivity {
 
     private EditText titleField;
     private EditText contentField;
     public static final String extraName = "DATA HOLDER";
+    public static final String extraName2 = "NOTE HOLDER";
+    private Note n;
+    private int list_index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +30,26 @@ public class EditNoteActivity extends AppCompatActivity {
 
         titleField = findViewById(R.id.titleField);
         contentField = findViewById(R.id.contentField);
-
-        titleField.setMovementMethod(new ScrollingMovementMethod());
         contentField.setMovementMethod(new ScrollingMovementMethod());
+
+        Intent intent = getIntent();
+        if (getIntent().hasExtra("EDIT")) {
+            n = (Note) intent.getSerializableExtra("EDIT");
+            list_index = (int) intent.getSerializableExtra("INDEX");
+            if (n != null) {
+                titleField.setText(n.getTitle());
+                contentField.setText(n.getContent());
+            }
+        }
+        //create new note by press add button from main activity
+        else {
+        }
+
+        long time = intent.getLongExtra("Time", 0);
+            String title = getIntent().getStringExtra("TITLE");
+            String content = getIntent().getStringExtra("CONTENT");
     }
 
-    //saving should happen in onPause
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -54,12 +72,21 @@ public class EditNoteActivity extends AppCompatActivity {
     public void returnValue(View v){
         String titleText = titleField.getText().toString();
         String contentText = contentField.getText().toString();
-
-        DataHolder dh = new DataHolder(titleText, contentText);
-
         Intent data = new Intent();// used to hold results data to be returned
-        data.putExtra(extraName, dh);
-        setResult(RESULT_OK, data);
+        if(n != null){//returning edited result
+            n.setContent(contentText);
+            n.setTitle(titleText);
+            data.putExtra(extraName, n);
+            data.putExtra("INDEX", list_index);
+            setResult(RESULT_OK,data);
+            Toast.makeText(this, "n is not empty, content is "+ n.getContent(), Toast.LENGTH_SHORT).show();
+        }
+        else{//returning new result
+            n = new Note(titleText, contentText);
+            data.putExtra(extraName, n);
+            setResult(RESULT_OK, data);
+            Toast.makeText(this, "n is new", Toast.LENGTH_SHORT).show();
+        }
         finish();//close current activity, returning to the original activity
     }
 

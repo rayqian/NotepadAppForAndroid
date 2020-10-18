@@ -46,27 +46,32 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Make some dummy notes (do NOT do this in your project!)
-//        for (int i = 0; i < 5; i++) {
-//            Note n = new Note(
-//                    "This is note " + (i+1),
-//                    "This text is the content of note number " + (i+1));
-//            noteList.add(n);
-//        }
-        writeJSONData();
+        Toast.makeText(this, "onCreate here", Toast.LENGTH_SHORT).show();
+//        writeJSONData();
         noteList.clear();
+        //reading json file in onCreate
         readJSONData();
+    }
 
+    //saving data to json happens in onPause
+    @Override
+    public void onPause() {
+        Toast.makeText(this, "onPause here", Toast.LENGTH_SHORT).show();
+        writeJSONData();
+        super.onPause();
     }
 
     @Override
     public void onClick(View view) {
-//        int pos = recyclerView.getChildLayoutPosition(v);
-//        Employee m = employeeList.get(pos);
-//        Toast.makeText(v.getContext(), "SHORT " + m.toString(), Toast.LENGTH_SHORT).show();
+        int pos = recyclerView.getChildLayoutPosition(view);
+        Note note = noteList.get(pos);
 
-        //open AddNoteActivity with data
-        createNewNote();
+        //call EditNoteActivity and edit the selected note
+        Intent intent = new Intent(this, EditNoteActivity.class);
+        intent.putExtra("EDIT", note);
+        intent.putExtra("INDEX", pos);
+
+        startActivityForResult(intent, 2);
     }
 
     @Override
@@ -85,7 +90,7 @@ public class MainActivity extends AppCompatActivity
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                finish();
+                //do nothing
             }
         });
         AlertDialog dialog = builder.create();
@@ -131,22 +136,33 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
+        if (requestCode == 1) {// receive result from adding new node
             if (resultCode == RESULT_OK) {
-                DataHolder dh = (DataHolder) data.getSerializableExtra(EditNoteActivity.extraName);
-                if (dh == null){
-                    return;
+                Note new_n = (Note) data.getSerializableExtra(EditNoteActivity.extraName);
+                if (new_n != null){
+                    Toast.makeText(this, "receive new_n", Toast.LENGTH_SHORT).show();
+                    noteList.add(new_n);
+//                    writeJSONData();
+//                    noteList.clear();
+//                    readJSONData();
                 }
-                Note n = new Note(
-                        dh.getTitle(),
-                        dh.getContent());
-                noteList.add(n);
-                writeJSONData();
-                noteList.clear();
-                readJSONData();
-                myAdapter.notifyDataSetChanged();
             }
         }
+        if(requestCode == 2){//receive result from editing existing node
+            //Toast.makeText(this, "resultCode is 2" , Toast.LENGTH_SHORT).show();
+            if(resultCode == RESULT_OK){
+                Note returned_n = (Note) data.getSerializableExtra(EditNoteActivity.extraName);
+                //Toast.makeText(this, "resultCode first user" , Toast.LENGTH_SHORT).show();
+                if(returned_n != null){
+                    Toast.makeText(this, "receive returned_n", Toast.LENGTH_SHORT).show();
+                    noteList.set((int)data.getSerializableExtra("INDEX"), returned_n);
+//                    writeJSONData();
+//                    noteList.clear();
+//                    readJSONData();
+                }
+            }
+        }
+        myAdapter.notifyDataSetChanged();
     }
 
     private void writeJSONData() {
@@ -207,7 +223,10 @@ public class MainActivity extends AppCompatActivity
     }
     public void deleteNote(Note n){
         noteList.remove(n);
-        //writeJSONData();
-        readJSONData();
+//        writeJSONData();
+//        noteList.clear();
+//        readJSONData();
+        myAdapter.notifyDataSetChanged();
     }
+
 }
