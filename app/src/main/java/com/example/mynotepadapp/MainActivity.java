@@ -166,6 +166,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
+        Collections.sort(noteList);//reorder the notes after editing
         myAdapter.notifyDataSetChanged();
     }
 

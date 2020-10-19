@@ -42,10 +42,10 @@ public class Note implements Comparable<Note>, Serializable {
     @Override
     public int compareTo(Note o){
         if(lastDate.before(o.lastDate)){
-            return -1;
+            return 1;
         }
         else if(lastDate.after(o.lastDate)){
-            return 1;
+            return -1;
         }
         else{
             return 0;

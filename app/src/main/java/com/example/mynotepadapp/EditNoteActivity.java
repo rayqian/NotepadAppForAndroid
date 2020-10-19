@@ -63,9 +63,16 @@ public class EditNoteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.menu_save:
-                //call add function to return value to the mainActivity
-                returnValue(null);
-                return true;
+                //a note without a title is not allowed to save
+//                if(titleField.getText().toString().trim().equals(" ")){
+//                    Toast.makeText(this, "untitled activity was not saved", Toast.LENGTH_SHORT).show();
+//                    return true;
+//                }
+            //call add function to return value to the mainActivity
+            returnValue(null);
+            return true;
+
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -75,14 +82,22 @@ public class EditNoteActivity extends AppCompatActivity {
         String titleText = titleField.getText().toString();
         String contentText = contentField.getText().toString();
         Intent data = new Intent();// used to hold results data to be returned
+
         if(n != null){//returning edited result
-            n.setContent(contentText);
-            n.setTitle(titleText);
-            n.setLastDate(new Date().getTime());
-            data.putExtra(extraName, n);
-            data.putExtra("INDEX", list_index);
-            setResult(RESULT_OK,data);
-            Toast.makeText(this, "n is not empty, content is "+ n.getContent(), Toast.LENGTH_SHORT).show();
+            //if no change was made, just return to the main activity
+            if(n.getTitle().equals(titleField.getText().toString()) && n.getContent().equals(contentField.getText().toString())){
+                finish();
+            }
+            //change was made, return the data to main activity
+            else{
+                n.setContent(contentText);
+                n.setTitle(titleText);
+                n.setLastDate(new Date().getTime());
+                data.putExtra(extraName, n);
+                data.putExtra("INDEX", list_index);
+                setResult(RESULT_OK,data);
+                Toast.makeText(this, "n is not empty, content is "+ n.getContent(), Toast.LENGTH_SHORT).show();
+            }
         }
         else{//returning new result
             n = new Note(titleText, contentText);
