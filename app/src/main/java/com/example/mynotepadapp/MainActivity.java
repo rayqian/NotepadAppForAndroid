@@ -25,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity
         noteList.clear();
         //reading json file in onCreate
         readJSONData();
+//        //reorder the notes by date
+//        Collections.sort(noteList);
     }
 
     //saving data to json happens in onPause
@@ -100,7 +104,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, "The back button was pressed - Bye!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Thanks for using my app, Bye-Bye!", Toast.LENGTH_SHORT).show();
         super.onBackPressed();
     }
 
@@ -173,6 +177,9 @@ public class MainActivity extends AppCompatActivity
             JsonWriter writer = new JsonWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8));
             writer.setIndent("  ");
             writer.beginArray();//create json array by adding a bracket [ in the beginning of json file
+
+            Collections.sort(noteList);
+
             for (Note n : noteList) {
                 writer.beginObject();//create json object by adding {
                 writer.name("title").value(n.getTitle());
@@ -214,6 +221,7 @@ public class MainActivity extends AppCompatActivity
                 n.setLastDate(dateMS);
                 noteList.add(n);
             }
+            //Collections.sort(noteList);
             Log.d(TAG, "readJSONData: " + noteList);
 
         } catch (Exception e) {

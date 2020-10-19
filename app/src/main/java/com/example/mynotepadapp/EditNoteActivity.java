@@ -14,12 +14,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Date;
+
 public class EditNoteActivity extends AppCompatActivity {
 
     private EditText titleField;
     private EditText contentField;
     public static final String extraName = "DATA HOLDER";
-    public static final String extraName2 = "NOTE HOLDER";
+
     private Note n;
     private int list_index;
 
@@ -76,6 +78,7 @@ public class EditNoteActivity extends AppCompatActivity {
         if(n != null){//returning edited result
             n.setContent(contentText);
             n.setTitle(titleText);
+            n.setLastDate(new Date().getTime());
             data.putExtra(extraName, n);
             data.putExtra("INDEX", list_index);
             setResult(RESULT_OK,data);
@@ -92,20 +95,26 @@ public class EditNoteActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Save data");
-        builder.setMessage("Do you want to save this data?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                returnValue(null);
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                finish();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        //if no change was made, just return to the main activity
+        if(n.getTitle().equals(titleField.getText().toString()) && n.getContent().equals(contentField.getText().toString())){
+            finish();
+        }
+        else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Save data");
+            builder.setMessage("Do you want to save this data?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    returnValue(null);
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    finish();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 }
