@@ -123,11 +123,16 @@ public class MainActivity extends AppCompatActivity
                 return true;
             case R.id.menu_about:
                 //call about function
-                //showAbout();
+                showAbout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showAbout() {
+        Intent intent = new Intent(this, ShowAboutActivity.class);
+        startActivity(intent);
     }
 
     private void createNewNote(){

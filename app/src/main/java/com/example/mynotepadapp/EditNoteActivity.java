@@ -110,26 +110,29 @@ public class EditNoteActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        //if no change was made, just return to the main activity
-        if(n.getTitle().equals(titleField.getText().toString()) && n.getContent().equals(contentField.getText().toString())){
-            finish();
+
+            //if no change was made, just return to the main activity
+            if(n != null && n.getTitle().equals(titleField.getText().toString()) && n.getContent().equals(contentField.getText().toString())){
+                finish();
+            }
+            // n is null or some change was made on existing note
+            else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Save data");
+                builder.setMessage("Do you want to save this data?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        returnValue(null);
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
         }
-        else{
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Save data");
-            builder.setMessage("Do you want to save this data?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    returnValue(null);
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    finish();
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
-    }
+
 }
