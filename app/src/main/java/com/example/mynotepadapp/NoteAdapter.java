@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -42,8 +41,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> {
         holder.title.setText(note.getTitle());
         //if content size is > 80, just substring the first 80 and add ... to display
         if(note.getContent().length() > 80){
-            String show = note.getContent().substring(0,80);
-            holder.content.setText(show + "...");
+            String show = note.getContent().substring(0,80) + "...";
+            holder.content.setText(show);
         }
         else{
             holder.content.setText(note.getContent());

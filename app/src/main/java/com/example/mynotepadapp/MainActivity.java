@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.JsonWriter;
 import android.util.Log;
@@ -26,8 +25,8 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnLongClickListener{
@@ -48,19 +47,16 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        Toast.makeText(this, "onCreate here", Toast.LENGTH_SHORT).show();
-//        writeJSONData();
         noteList.clear();
         //reading json file in onCreate
         readJSONData();
-//        //reorder the notes by date
-//        Collections.sort(noteList);
+        //showing the current number of notes in the title bar
+        setTitle(noteList);
     }
 
     //saving data to json happens in onPause
     @Override
     public void onPause() {
-        Toast.makeText(this, "onPause here", Toast.LENGTH_SHORT).show();
         writeJSONData();
         super.onPause();
     }
@@ -82,11 +78,10 @@ public class MainActivity extends AppCompatActivity
     public boolean onLongClick(View view) {
         int pos = recyclerView.getChildLayoutPosition(view);
         final Note m = noteList.get(pos);
-//        Toast.makeText(v.getContext(), "LONG " + m.toString(), Toast.LENGTH_SHORT).show();
         //show dialog to delete the note
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete note");
-        builder.setMessage("Do you want to delete this note?");
+        builder.setMessage("Do you want to delete the note '" + m.getTitle() +"' ?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 deleteNote(m);
@@ -104,7 +99,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(this, "Thanks for using my app, Bye-Bye!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Bye, Thanks for using my app!", Toast.LENGTH_SHORT).show();
         super.onBackPressed();
     }
 
@@ -137,9 +132,7 @@ public class MainActivity extends AppCompatActivity
 
     private void createNewNote(){
         Intent intent = new Intent(this, EditNoteActivity.class);
-        //startActivity(intent);
         startActivityForResult(intent, 1);
-        //myAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -149,29 +142,20 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK) {
                 Note new_n = (Note) data.getSerializableExtra(EditNoteActivity.extraName);
                 if (new_n != null){
-                    Toast.makeText(this, "receive new_n", Toast.LENGTH_SHORT).show();
                     noteList.add(new_n);
-//                    writeJSONData();
-//                    noteList.clear();
-//                    readJSONData();
                 }
             }
         }
         if(requestCode == 2){//receive result from editing existing node
-            //Toast.makeText(this, "resultCode is 2" , Toast.LENGTH_SHORT).show();
             if(resultCode == RESULT_OK){
                 Note returned_n = (Note) data.getSerializableExtra(EditNoteActivity.extraName);
-                //Toast.makeText(this, "resultCode first user" , Toast.LENGTH_SHORT).show();
                 if(returned_n != null){
-                    Toast.makeText(this, "receive returned_n", Toast.LENGTH_SHORT).show();
                     noteList.set((int)data.getSerializableExtra("INDEX"), returned_n);
-//                    writeJSONData();
-//                    noteList.clear();
-//                    readJSONData();
                 }
             }
         }
         Collections.sort(noteList);//reorder the notes after editing
+        setTitle(noteList);//update the current number of notes in the title bar
         myAdapter.notifyDataSetChanged();
     }
 
@@ -237,10 +221,19 @@ public class MainActivity extends AppCompatActivity
     }
     public void deleteNote(Note n){
         noteList.remove(n);
-//        writeJSONData();
-//        noteList.clear();
-//        readJSONData();
+        setTitle(noteList);
         myAdapter.notifyDataSetChanged();
     }
+
+    public void setTitle(List<Note> n){
+        if(n != null){
+            Objects.requireNonNull(getSupportActionBar()).setTitle("my notes" + " (" + n.size() + ")");//update the current number of notes in the title bar
+        }
+        else{
+            Objects.requireNonNull(getSupportActionBar()).setTitle("my notes");
+        }
+
+    }
+
 
 }

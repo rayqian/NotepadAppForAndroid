@@ -35,6 +35,7 @@ public class EditNoteActivity extends AppCompatActivity {
         contentField.setMovementMethod(new ScrollingMovementMethod());
 
         Intent intent = getIntent();
+        //for editing mode
         if (getIntent().hasExtra("EDIT")) {
             n = (Note) intent.getSerializableExtra("EDIT");
             list_index = (int) intent.getSerializableExtra("INDEX");
@@ -43,13 +44,7 @@ public class EditNoteActivity extends AppCompatActivity {
                 contentField.setText(n.getContent());
             }
         }
-        //create new note by press add button from main activity
-        else {
-        }
 
-        long time = intent.getLongExtra("Time", 0);
-            String title = getIntent().getStringExtra("TITLE");
-            String content = getIntent().getStringExtra("CONTENT");
     }
 
 
@@ -63,15 +58,9 @@ public class EditNoteActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.menu_save:
-                //a note without a title is not allowed to save
-//                if(titleField.getText().toString().trim().equals(" ")){
-//                    Toast.makeText(this, "untitled activity was not saved", Toast.LENGTH_SHORT).show();
-//                    return true;
-//                }
             //call add function to return value to the mainActivity
             returnValue(null);
             return true;
-
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -82,6 +71,12 @@ public class EditNoteActivity extends AppCompatActivity {
         String titleText = titleField.getText().toString();
         String contentText = contentField.getText().toString();
         Intent data = new Intent();// used to hold results data to be returned
+
+        //if title is empty, exit and show a toast
+        if(titleText.trim().isEmpty()){
+            finish();
+            Toast.makeText(this, "Sorry, un-titled not cannot be saved.", Toast.LENGTH_SHORT).show();
+        }
 
         if(n != null){//returning edited result
             //if no change was made, just return to the main activity
@@ -96,21 +91,18 @@ public class EditNoteActivity extends AppCompatActivity {
                 data.putExtra(extraName, n);
                 data.putExtra("INDEX", list_index);
                 setResult(RESULT_OK,data);
-                Toast.makeText(this, "n is not empty, content is "+ n.getContent(), Toast.LENGTH_SHORT).show();
             }
         }
         else{//returning new result
             n = new Note(titleText, contentText);
             data.putExtra(extraName, n);
             setResult(RESULT_OK, data);
-            Toast.makeText(this, "n is new", Toast.LENGTH_SHORT).show();
         }
         finish();//close current activity, returning to the original activity
     }
 
     @Override
     public void onBackPressed(){
-
             //if no change was made, just return to the main activity
             if(n != null && n.getTitle().equals(titleField.getText().toString()) && n.getContent().equals(contentField.getText().toString())){
                 finish();
@@ -118,8 +110,8 @@ public class EditNoteActivity extends AppCompatActivity {
             // n is null or some change was made on existing note
             else{
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Save data");
-                builder.setMessage("Do you want to save this data?");
+                builder.setTitle("Save note");
+                builder.setMessage("Your note is not saved! Save the note? ");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         returnValue(null);

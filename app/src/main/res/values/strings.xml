@@ -8,5 +8,8 @@
     <string name="save">save</string>
     <string name="enter_title_here">enter title here</string>
     <string name="notes_file">NotesFile.json</string>
+    <string name="my_note_app">My Note App</string>
+    <string name="_2020_yu_qian">©2020, Yu Qian</string>
+    <string name="version_1_0">Version 1.0</string>
 
 </resources>

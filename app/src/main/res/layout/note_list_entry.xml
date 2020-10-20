@@ -22,8 +22,8 @@
 
     <TextView
         android:id="@+id/time"
-        android:layout_width="194dp"
-        android:layout_height="23dp"
+        android:layout_width="234dp"
+        android:layout_height="31dp"
         android:layout_marginTop="8dp"
         android:text="@string/time"
         app:layout_constraintEnd_toEndOf="@+id/title"
